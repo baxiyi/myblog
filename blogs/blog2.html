@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JavaScript高级程序设计-基本概念</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="../styles/blog.css">
+</head>
+<body>
+<header class="blogHeader">
+	<h1>MZW Blog</h1>
+	<nav>
+		<ul class="blogNavigator">
+			<li><a href="../index.html">主页</a></li>
+			<li><a href="../write.html">写博客</a></li>
+			<li><a href="../about.html">关于</a></li>
+		</ul>
+	</nav>
+</header>
+<article class="blogArticle">
+	<h1>基本概念</h1>
+	<ol>
+		<li>
+			用var定义的是局部变量，如：
+			<code>function test{
+				var a=1;
+				}</code>
+			此时a为局部变量，test函数结束后就不能再使用。
+			如果想设为全局变量,需要去掉var：<code>function test{ a=1; }</code>这样在fucntion结束后a仍然有效。<br>
+		</li>
+		<li>
+			<p>ES5中五种简单数据类型：Undefined,Null,Boolean,Number,String。<br>
+				一种复杂数据类型：Object。<br></p>
+		</li>
+		<li>
+			<p>数制转换：Number()函数只要字符串中出现非数字，就会转换为NaN，&quot;&quot;会被转化为0；parseInt()函数则是寻找第一个有效数字，忽略前面的字符，&quot;&quot;会被转化为NaN(因为找不到有效数字)<br>
+				<code>Number(&quot;blue1234aa12&quot;); //结果为NaN</code><br>
+				<code>parseInt(&quot;blue1234aa12&quot;); //结果为1234</code><br>
+				parseInt()还可以有第二个参数表示转化为几进制（2，8，10，16）的数，如：parseInt(&quot;10&quot;,2); 结果为1010。<br></p>
+		</li>
+	</ol>
+</article>
+
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
