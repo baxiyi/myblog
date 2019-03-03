@@ -1,4 +1,4 @@
-header{
+#indexHeader{
     position:relative;
     height:300px;
     background-attachment: scroll;
@@ -109,5 +109,43 @@ blog.date{
     height:100px;
     color:gray;
     overflow: hidden;
+}
+#writeHeader{
+    position: relative;
+    height:150px;
+}
+
+#aboutArticle{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: row;
+    position:relative;
+}
+#aboutArticle img{
+    width:100px;
+    height:100px;
+    margin-left:50px;
+    margin-right:50px;
+}
+.resume{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    background-color:black;
+    color:white;
+    border: 1px solid black;
+    border-radius: 15px;
+    width:400px;
+    height:500px;
+}
+.resume ul{
+    margin-right:20px;
+}
+.resume li{
+    font-size:1em;
+}
+.resume h1{
+    text-align:center;
 }
 

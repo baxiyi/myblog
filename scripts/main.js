@@ -26,6 +26,38 @@ function showBlogContent(){
 
     }
 }
-window.onload=function(){
-    showBlogContent();
+let num=0;
+function resumeSlide(){
+    $(".resume:not(#education)").hide();
+    $("#aboutArticle #pre").hide();
+    $("#aboutArticle #pre").click(
+        function(){
+            num--;
+            if(num==0){
+                $("#aboutArticle #pre").hide();
+            }else{
+                $("#aboutArticle img").show();
+            }
+            $(".resume:eq("+num+")").show(1000);
+            $(".resume:eq("+(num+1)+")").hide(1000);
+            //$(".resume:not(:eq("+num+"))").hide();
+        });
+    $("#aboutArticle #next").click(
+        function(){
+            num++;
+            if(num==5){
+                $("#aboutArticle #next").hide();
+            }else{
+                $("#aboutArticle img").show();
+            }
+            $(".resume:eq("+num+")").show(1000);
+            $(".resume:eq("+(num-1)+")").hide(1000);
+            //$(".resume:not(:eq("+num+"))").hide();
+        });
 }
+$(document).ready(
+    showBlogContent()
+);
+$(document).ready(
+    resumeSlide()
+);
