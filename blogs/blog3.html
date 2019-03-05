@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>LeetCode-动态规划</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../styles/blog.css">
+</head>
+<body>
+<header class="blogHeader">
+    <nav>
+        <h1>MZW Blog</h1>
+        <ul class="blogNavigator">
+            <li><a href="../index.html">主页</a></li>
+            <li><a href="../write.html">写博客</a></li>
+            <li><a href="../about.html">关于</a></li>
+        </ul>
+    </nav>
+</header>
+<article class="blogArticle">
+    <h1>LeetCode-Unique Paths</h1>
+    <p><br>
+        最近在刷LeetCode的时候遇到了一些动态规划的问题，于是对动态规划进行了一下学习和总结。动态规划的核心就是记录已经计算出来的结果来为后面的计算做简化，这样就减少了很多重复工作，降低了算法复杂度。下面以LeetCode上的一道题为例。<br></p>
+    <h2>问题描述：<br></h2>
+    <p>A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).</p>
+    <p>The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).</p>
+    <p>How many possible unique paths are there?</p>
+    <p>Above is a 7 x 3 grid. How many possible unique paths are there?</p>
+    <p>Note: m and n will be at most 100.</p>
+    <p>Example 1:</p>
+    <p>Input: m = 3, n = 2<br>
+        Output: 3<br>
+        Explanation:<br>
+        From the top-left corner, there are a total of 3 ways to reach the bottom-right corner:
+        1. Right -&gt; Right -&gt; Down<br>
+        2. Right -&gt; Down -&gt; Right<br>
+        3. Down -&gt; Right -&gt; Right<br>
+        Example 2:</p>
+    <p>Input: m = 7, n = 3<br>
+        Output: 28</p>
+    <h2>解法：</h2>
+    <h2>1.回溯算法</h2>
+    <pre>
+class Solution {
+    int res=0;
+    public int uniquePaths(int m, int n) {
+        solve(0,0,m-1,n-1);
+        return res;
+    }
+    void solve(int x,int y,int m,int n){
+        if(x==m&&y==n){
+            res++;
+            return;
+        }
+        if(x!=m){
+            x++;
+            solve(x,y,m,n);
+            x--;
+        }
+        if(y!=n){
+            y++;
+            solve(x,y,m,n);
+            y--;
+        }
+    }
+}
+</pre>
+    <p>但是由于复杂度过高，无法通过测试。<br></p>
+    <h2>2.动态规划</h2>
+    <p>使用一个dp[m][n]数组存储从（0，0）到（i，j）有多少条路径，因为只能向下或者向右移动，所以到达（i，j）一点的时候只可能是从上或者从左到达的，所以dp[i][j]=dp[i-1][j]+dp[i][j-1]。为了保证i-1和j-1有效，需要为dp[i][0]和dp[0][j]赋初值，注意初值为1不是0，因为从(0,0)到达和它一行和一列的位置都只有一种路径（即一直向右走和一直向下走）。<br>
+        代码如下：</p>
+    <pre><code>class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp=new int[m][n];
+        for(int i=0;i&lt;m;i++){
+            dp[i][0]=1;
+        }
+        for(int j=0;j&lt;n;j++){
+            dp[0][j]=1;
+        }
+        for(int i=1;i&lt;m;i++){
+            for(int j=1;j&lt;n;j++){
+                dp[i][j]=dp[i-1][j]+dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+}
+</code></pre>
+
+    <p>这种解法通过一个dp数组记录了每个位置有多少条路径，相比回溯算法节省了很多重复工作。</p>
+</article>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
