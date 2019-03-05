@@ -2,6 +2,7 @@
     position:relative;
     height:300px;
     background-attachment: scroll;
+    background-color:rgba(0,0,0,0.5);
 }
 #blogTitle{
     position:absolute;
@@ -100,6 +101,7 @@ blog.date{
 }
 #contact a:hover{
     font-weight: bold;
+    /*transform: scale(1.4);*/
 }
 #contact img{
     width:50px;
@@ -128,7 +130,11 @@ blog.date{
     margin-left:50px;
     margin-right:50px;
 }
+#aboutArticle img:hover{
+    transform: scale(1.4);
+}
 .resume{
+    /*position:absolute;*/
     display: flex;
     flex-direction:column;
     justify-content: center;
