@@ -56,6 +56,37 @@ function resumeSlide(){
             //$(".resume:not(:eq("+num+"))").hide();
         });
 }
+$("#loginButton").click(
+    function () {
+        if($("#loginForm #user").val()==""||$("#loginForm #password").val()==""){
+            alert("用户名或密码不能为空!");
+            return false;
+        }
+        let flag=true;
+        $.ajax({
+            url:"loginMessage.json",
+            type:"get",
+            dataType:"json",
+            async:false,
+            success:function(data){
+                if($("#loginForm #user").val()==data["user"]&&
+                $("#loginForm #password").val()==data["password"]){
+                    alert("登陆成功");
+                    $("#loginForm #user").val("");
+                    $("#loginForm #password").val("");
+                    flag=true;
+                }else{
+                    alert("密码或用户名错误，请重新登录");
+                    $("#loginForm #user").val("");
+                    $("#loginForm #password").val("");
+                    flag=false;
+                }
+            }
+            }
+        )
+        return flag;
+    }
+)
 $(document).ready(
     showBlogContent()
 );

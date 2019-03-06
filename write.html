@@ -16,14 +16,26 @@
     </nav>
     <h1 id="blogTitle">MZW Blog</h1>
 </header>
-<article>
+<article id="writeArticle">
     <div id="login">
-
+        <p>账号登录</p>
+        <form action="" id="loginForm">
+            <div class="loginPart">
+                <img src="images/user.png" alt="user" class="label">
+                <input type="text" name="user" id="user" placeholder="用户名" value="">
+            </div>
+            <div class="loginPart">
+                <img src="images/password.png" alt="password" class="label">
+                <input type="password"name="password" id="password" placeholder="密码" value="">
+            </div>
+            <a id="loginButton" href="writeBlog.html">登录</a>
+        </form>
     </div>
 </article>
 <footer>
 
 </footer>
+<script type="text/javascript" src="scripts/jQuery.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 </body>
 </html>
