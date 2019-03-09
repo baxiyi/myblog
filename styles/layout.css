@@ -208,3 +208,6 @@ blog.date{
 #realLoginButton{
     display: none;
 }
+img{
+    max-width: 100%;
+}
