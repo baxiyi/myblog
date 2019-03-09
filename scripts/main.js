@@ -56,6 +56,8 @@ function resumeSlide(){
             //$(".resume:not(:eq("+num+"))").hide();
         });
 }
+//登录功能
+/*
 $("#loginButton").click(
     function () {
         if($("#loginForm #user").val()==""||$("#loginForm #password").val()==""){
@@ -87,9 +89,61 @@ $("#loginButton").click(
         return flag;
     }
 )
+*/
+//用Promise实现ajax
+function ajax(url,type){
+    return new Promise((resolve,reject)=>{
+        let xhr=new XMLHttpRequest();
+        xhr.open(type,url,true);
+        xhr.send();
+        xhr.onreadystatechange=function (){
+            if(xhr.readyState==4){
+                if(xhr.status>=200&&xhr.status<300||xhr.status==304){
+                    let response=JSON.parse(xhr.responseText);
+                    resolve(response);
+                }
+                else{
+                    reject(new Error(xhr.statusText));
+                }
+            }
+        }
+    })
+}
+function addLoginEvent(){
+    if(document.getElementById("loginButton")){
+        document.getElementById("loginButton").onclick=function(){
+            ajax("loginMessage.json","get").then(function (response) {
+                if($("#loginForm #user").val()==response["user"]&&
+                    $("#loginForm #password").val()==response["password"]){
+                    alert("登陆成功");
+                    $("#loginForm #user").val("");
+                    $("#loginForm #password").val("");
+                    let event=new MouseEvent('click',{
+                            cancelable:true,
+                            bubbles:true,
+                            view:window
+                        }
+                    );
+                    document.querySelector("#realLoginButton").dispatchEvent(event);
+
+                }else{
+                    alert("用户名或密码错位，请重新登录");
+                    $("#loginForm #user").val("");
+                    $("#loginForm #password").val("");
+                }
+            });
+            return false;
+        }
+
+    }
+}
+
 $(document).ready(
     showBlogContent()
 );
 $(document).ready(
     resumeSlide()
+);
+$(document).ready(
+  addLoginEvent()
 );

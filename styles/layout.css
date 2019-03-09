@@ -205,3 +205,6 @@ blog.date{
     flex-direction: row;
     position: relative;
 }
+#realLoginButton{
+    display: none;
+}
