@@ -1,0 +1,211 @@
+# ES6新特性#
+
+ES6中出现了很多新的概念，其中比较重要的有let,const声明，箭头函数，Promise异步编程，针对这三方面我进行了以下的总结。
+
+## let,const声明 ##
+
+1. var声明。<br>ES6之前都是使用var声明，而这种声明的一个特点就是变量提升机制，无论变量在哪里声明都会被提升到作用域顶部。如: <pre>
+	function func(condition){
+		if(condition){
+			var a=1;
+			return a;
+		}
+		//在此处仍然可以访问变量a,其值为undefined
+	}</pre>
+1. let声明和const声明<br>这两种声明为块级声明，就不会出现前面的问题。在//处无法访问到变量，会报错，而且let变量禁止重声明。const 与let的区别在于，用const声明的变量为常量，不能改变它的值。但是如果const绑定的是一个对象，那么是可以修改对象属性的值的，但是不能重新绑定新的对象，如:
+	<pre>
+	const person={name:"mzw"};
+	person.name="zhang";//不会报错
+	person={name:"zhang"};//会报错
+	</pre>
+
+
+1. 关于let,const和var的区别还体现在循环中的作用域绑定上，如：<br>
+	<pre>
+	var funcs=[];
+	for(let i=0;i<10;i++){
+		funcs.push(function(){
+			alert(i);
+		});
+	}
+	funcs.forEach(function(func){
+		func();
+	})
+	//会输出0-9	
+	</pre>
+如果改为var变量声明，则会输出10个10，因为i为整个循环共享，当循环结束的时候i为10，所以调用的时候均输出10，而let则在每一次循环迭代时创建一个新的变量，并将之前的一次值赋给它，所以每次的i值都不一样。<br>
+此外，如果要在循环中使用const，必须保证变量值不发生改变，上面的例子中有i++，所以不行，如果在 for-in循环中是可以的。
+1. let和const还有一个副作用，叫做临时死区。是指在块级代码中let声明之前不能对其进行调用，否则就算是typeof这样的操作符也会报错，因为此时变量处于临时死区。
+	<pre>
+	alert(typeof a);//undefined，反而不会报错，因为不在临时死区
+	fucntion func(){
+		alert(typeof a);//报错
+		let a=1;
+	}
+	</pre>
+1. let,const和var的区别还在于不会覆盖全局作用域的属性，如:
+	<pre>
+	let Array="hi";
+	alert(Array);//hi
+	alert(Array === window.Array);//false
+	</pre>
+可见,Array变量并没有覆盖window原有的属性，如果改为var，会输出true。
+1. 关于三种变量的使用：目前最佳的使用方法是，默认使用const，当变量需要改变时再使用let，这样可以避免很多修改常量产生的问题，更加安全。
+
+## 函数新特性 ##
+
+1. 默认参数值<br>适用于调用的参数数量小于函数定义的参数数量的情况，如:
+	<pre>
+	function request(url,timeout=2000,callback=()=>{}){
+		
+	}
+	request("/foo");//timeout和callback会传入默认值
+	request("/foo",undefined,func);//只有timeout传入默认值
+	</pre>
+使用默认参数值不会改变arguments的值（与ES5严格模式下相同）,如上面的第二个调用，函数内部arguments[1]为undifined,而不是2000。<br>
+默认值除了可以传入数值之外，还可以传入表达式，甚至可以是关于前面参数的一个表达式，如：<br>
+	<pre>
+	let getValue = num=>num+5;
+	function add(num1,num2=getValue(num1)){
+		return num1+num2;
+	}
+	add(1);//返回值为7
+	</pre>
+但是，前面的参数是不可以调用后面参数的，因为临时死区问题会出现，如:<br>
+	<pre>
+	let getValue = num=>num+5;
+	function add(num1=getValue(num2),num2){
+		return num1+num2;
+	}
+	add(undefined,1);//报错
+	</pre>
+1. 不定参数<br>用于调用的参数数量大于函数定义的参数数量的情况，如:<br>
+	<pre>
+	function pick(object,...keys){
+	}
+	</pre>
+...keys代表一个不定参数数组，要注意这个参数只能放在最后，不定参数后面还有参数会报错,而且不定参数只能使用一次。
+1. 展开运算符(...)<br>与不定参数十分相似，可以用来替代es5中apply()和call()方法。如:<br>
+	<pre>
+	let values=[1,5,3,4,2];
+	Math.max(...values,0);//甚至可以再传一个参数0
+	</pre>
+1. new.target属性用来表示该函数是否通过new方式（Construct函数）调用，如果不是，则为undefined,如果是则为函数名。
+2. 块级函数在es6中会被提升到全局作用域。
+3. 箭头函数<br>箭头函数没有this,arguments,new.target绑定，这些属性将与其外围最近一层函数相同;不能通过new方法调用;没有prototype。<br>
+有以下几个重要用法:<br>
+1.创建立即执行函数,如:<br>
+	<pre>
+	let Person=((name)=>{
+		return {
+			getName:function(){
+				return name;		
+			}
+	}
+	})("mzw");
+	//将函数定义用小括号包裹起来
+	</pre>
+2.没有this绑定,如:<br>
+	<pre>
+	let PageHandler={
+		id:"123456",
+		init:function(){
+			document.addEventListener("click",function(event){
+				this.doSomething();//报错
+			},false)
+		}
+		doSomething:function(){
+			//函数
+		}
+	}
+	</pre>
+如果这样写则会报错，因为在事件处理函数中this变成了document，而document中没有doSomething()函数，这与设计初衷也相悖,但是,如果把init函数变为箭头函数，则可以解决这个问题，箭头函数中this就是它上一层作用域。
+	<pre>
+	document.addEventListener("click",event=>this.doSomething(),false)
+	</pre>
+3.箭头函数和数组，如:
+	<pre>
+	let result=values.sort((a,b)=>a-b);
+	</pre>
+1. 尾调用优化<br>尾调用优化的函数需要满足以下条件：1.不是闭包。2.在函数最后调用。3.作为返回值返回，且不参与任何运算。<br>
+满足以上条件，尾调用不会创建新栈，而是清空当前栈进行重用，如可以这样对斐波那契数列的递归调用进行优化:<br>
+	<pre>
+	function factorial(n,p=1){
+		if(n==1)
+			return 1*p;
+		else
+			let result=n*p;
+		return factorial(n-1,result);
+	}
+	</pre>
+
+##Promise异步编程  ##
+
+1. 在Promise之前的异步编程<br>
+在Promise之前有两种方式实现js的异步编程：<br>
+1.事件模型  2.回调函数<br>
+事件模型很难把多个异步事件连接在一起，而回调函数要做到异步事件的连接，可以使用回调函数嵌套的方式，嵌套多了可能会陷入回调地狱。
+
+
+1. Promise<br>
+(1) Promise有三种状态，pending(进行中),fulfilled(操作完成),rejected(操作未能完成);两种操作，resolve()用于将状态由pending转化为fulfilled,reject()用于将状态由pending转化为rejected；两个方法，then()方法，可以接收两个参数，第一个参数为当fulfilled时调用的函数，第二个为当rejected时调用的函数，catch()方法，传入一个参数，为rejected时调用的函数。同时resolve()中可以给then()的第一个函数传递参数，reject()可以给then的第二个参数（catch的第一个参数）传递参数，下面是一个Promise封装Ajax的实例:
+	<pre>
+	function ajax(url,type){
+	    return new Promise((resolve,reject)=>{
+	        let xhr=new XMLHttpRequest();
+	        xhr.open(type,url,true);
+	        xhr.send();
+	        xhr.onreadystatechange=function (){
+	            if(xhr.readyState==4){
+	                if(xhr.status>=200&&xhr.status<300||xhr.status==304){
+	                    let response=JSON.parse(xhr.responseText);
+	                    resolve(response);
+	                }
+	                else{
+	                    reject(new Error(xhr.statusText));
+	                }
+	            }
+	        }
+	    })
+	}
+	</pre>
+这是创建了一个未完成的Promise。<br>
+(2) Promise还可以创建一个已完成的Promise或者已拒绝的Promise。用到的是Promise.resolve()和Promise.rejected。通过这两种方法，无论传入的参数是否为Promise对象，最后都会被转化为Promise。
+如传入非Promise的thenable对象（拥有then方法且接收resolve和reject两个参数）时：
+	<pre>
+	let thenable={
+		then:(resolve,reject)=>{
+			resolve(20);
+		}
+	};
+	let p1=Promise.resolve(thenable);
+	p1.then(function(val){
+		console.log(val);//20
+	})
+	</pre>
+(3) 有了Promise，连接异步操作就变得很简单，只需要串联then()方法和catch()方法即可，形式如下:
+	<pre>
+	p1.then().then().catch().....//具体参数省略
+	</pre>
+(4) Promise.all()和Promise.race()。<br>
+	这两种方法用于同时监听多个Promise，其中all()方法是当监听的所有Promise被解决时，才会被解决，而race()是其中一个被解决就会被解决（竞选机制）。两者都是当一个Promise被拒绝时，就会被拒绝。
+	用法如下:
+	<pre>
+	let p1=new Promise(function(resovle,reject){
+		resolve(42);
+	});
+	let p2=new Promise(function(resolve,reject){
+		resolve(43);
+	})
+	let p3=new Promise(function(resolve,reject){
+		resolve(44);
+	})
+	
+	let p4=Promise.all(p1,p2,p3);
+	p4.then(fucntion(value){
+		console.log(value[0]);//42
+		console.log(value[1]);//43
+		console.log(value[2]);//44
+	});
+	//传入then的value是个数组，按解决的顺序存储
+	</pre>
