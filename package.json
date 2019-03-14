@@ -1,0 +1,25 @@
+{
+  "name": "myblog",
+  "version": "1.0.0",
+  "description": "My blog\r 本博客使用html,css,javascript以及jQuery库进行搭建，目前已经实现了博客浏览，动画简历，站长登录功能，站长登录后还不能发帖，目前只能在后台进行发帖，博客地址:https://baxiyi.github.io/myblog/index.html<br>\r 接下来的目标:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baxiyi/myblog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/baxiyi/myblog/issues"
+  },
+  "homepage": "https://github.com/baxiyi/myblog#readme",
+  "devDependencies": {
+    "css-loader": "^2.1.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
+  },
+  "dependencies": {}
+}
